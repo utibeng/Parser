@@ -9,6 +9,7 @@ import re
 from collections import Counter
 from docx.enum.text import WD_BREAK
 import sys
+from docx.enum.style import WD_STYLE_TYPE
 
 
 
@@ -30,11 +31,27 @@ def writeText(p1, textToWrite1, italicText, boldText, underlineText, font_size0,
 		fontUsed.underline = True
 	fontUsed.name = font_name0
 	if ((int(float(font_size0)) > 0) and (int(float(font_size0)) < 1000)):
-		fontUsed.size = Pt(int(float(font_size0)))	
+		fontUsed.size = Pt(int(float(font_size0)))
 	return
 
+
+def buildString(formattings_element, charParams_element):
+	
+	strBuilt = ""
+	bb = len(formattings_element.findall(charParams_element))
+	
+	if ( bb < 1):
+		#print (formattings_element.findall('charParams'))
+		
+		return formattings_element.text
+	else:
+		for a_charParams in formattings_element.iter(charParams_element):
+			strBuilt = strBuilt + a_charParams.text
+			#print("found Xter ", a_charParams)
+		return strBuilt
+	
 #Writes Paragraphs with the original style into docx document
-def writeParagraphtoDocument(root_element, page_element, pars_element, formattings_element, fileName):	
+def writeParagraphtoDocument(root_element, page_element, pars_element, formattings_element, fileName, charParams_element):	
 	docx_document = Document(fileName)
 	stringToWrite = ""
 	line_spa = 111
@@ -46,11 +63,25 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 
 	num_of_pages = root_element.get("NUMBEROFPAGES", 0)	
 	pagenum_location = root_element.get("PAGENUMBERINGLOCATION", 0)
+	x = 0
+
+	#paragraph = document1.add_paragraph()
+	#paragraph.style = document1.styles['BfA Normal']
+	#run = paragraph.add_run( "THIS IS BFA NORMAL")
+
 
 	for a_par in root_element.iter(pars_element):
+		print("Writing Paragraph Number ", x)
+		x += 1
 		line_spa1 = a_par.get("lineSpacing", 111)
 		alignment1 = a_par.get("align", "NONE")
 		p = setParagraph(docx_document, line_spa1, alignment1)
+
+		#Set Paragraph Style	
+		par_style = a_par.get("STYLE")
+		print("STYLE DETECTED IS ... ", par_style)		
+		p.style = par_style
+
 		if((line_spa != line_spa1)or(alignment != alignment1)):
 			stringToWrite = "Current Line Spacing XXX is " + str(line_spa1) + " Current Alignment YYY is " + str(alignment1)
 			line_spa = line_spa1
@@ -65,8 +96,13 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 			isItalic1 = a_format.get("italic", 0)
 			font_name00 = a_format.get("ff", "Calibri")
 
-			inline_1 = a_format.get("INLINE", "False")			
-			stringToWrite = a_format.text
+			inline_1 = a_format.get("INLINE", "False")
+
+			
+			#stringToWrite = a_format.text
+			stringToWrite = buildString(a_format,charParams_element)
+
+
 			if(replaced_flag):
 				inline_1 = "True"
 
@@ -96,7 +132,7 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 
 			first_run = 0
 			writeText(p, stringToWrite, isItalic1, isBold1,0, font_size1, inline_1, font_name00)
-			docx_document.save(fileName)
+	docx_document.save(fileName)
 
 
 #APPROVED::::Sets Paragraph based on the original document
@@ -268,25 +304,46 @@ def getNumberOfPages(root_element, pages_element, formattings_element):
 		numOfPagesCounted += 1
 	return numOfPagesCounted
 
+def addHeadingStyles(doc_1):
+	styles = doc_1.styles
+	styles.add_style('Heading 1', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
+	styles.add_style('Heading 2', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
+	styles.add_style('Heading 3', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
+	styles.add_style('Heading 4', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
+	styles.add_style('Heading 5', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
+	styles.add_style('Heading 6', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
+
+
+
+
+
 #END OF FUNCTIONS,
 def main():
 	#Define XML File Parameters
-
+	
+	print("Checking I/O Files ...")
 	xml_file_name = ""
 	if(sys.argv[1].rfind(".xml") == -1):
 		xml_file_name = sys.argv[1] + ".xml"
 	else:
 		xml_file_name = sys.argv[1]
+	print("Input File is ...", xml_file_name)
+	print("*********************************")
 
 	tree = ET.parse(xml_file_name)
+	print("PARSED XML FILE ...", tree)
+	print("*********************************")
 	root = tree.getroot()
 	nameSpace = "{http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml}"
 	blocks = nameSpace + "block"
 	formattings = nameSpace + "formatting"
+	charParams = nameSpace + "charParams"
 	pars = nameSpace + "par"
 	lines = nameSpace + "line" 
 	pages = nameSpace + "page"
 	texts = nameSpace + "text"
+	
+
 
 	#Define Docx Parameters and Document to write to	
 	created_file = ""
@@ -294,8 +351,34 @@ def main():
 		created_file = sys.argv[2] + ".docx"
 	else:
 		created_file = sys.argv[2]
-	document1 = Document()
+	print("Output File is ...", created_file)
+	print("*********************************")
+	print("Processing ...")
+
+	document1 = Document("Template.docx")
+	addHeadingStyles(document1)
 	document1.save(created_file)	
 	#Write XMl Contents to docx
-	writeParagraphtoDocument(root, pages, pars, formattings, created_file)
+	print("Started Writing to Word Document")
+	writeParagraphtoDocument(root, pages, pars, formattings, created_file, charParams)
 main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

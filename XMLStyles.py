@@ -33,7 +33,10 @@ def insertPageNumbers(root_element, pages_element, formattings_element,num_of_pa
 	else:
 		dict_1 = {}
 	counter = 1
-	print (dict_1)
+	#print(pagenum_location)
+	#print (dict_1)
+	if (pagenum_location is "NONE"):
+		return
 	for a_page in root_element.iter(pages_element):
 		a_page.attrib['PAGENUMBERINDEX'] = str(counter)
 		a_page.attrib['PAGENUMBERSCANNED'] = str(dict_1[counter])
@@ -59,6 +62,7 @@ def stripDigits(string2a):
 	return string2a
 
 #Strips Non Digits from String to Search for Page Numbering
+#ENHANCE BY SEARCHING FOR PAGE, PG, P. FIRST...
 def stripNONDigits_3(string1a, pgNum):
 	string2a = str(string1a)
 	newString = ""
@@ -162,22 +166,32 @@ def getFooter (footer4, pages):
 	return dictOfFooters
 
 #Determines if Page Numbering is at Top, Bottom or None
-def checkPageNumbering(topLines, bottomLines, num_of_pages):	
+def checkPageNumbering(topLines, bottomLines, num_of_pages):
+	#print("TOPLINES ARE ", topLines)
+	#print("BOTTOMLINES ARE ", bottomLines)
+	#print("NUMBER OF PAGES ARE ", num_of_pages)
+
+
 	topLines_1 = list()
 	bottomLines_1 = list()
 	i = 0
+
 	for tpline in topLines:
 		topLines_1.append(stripNONDigits_3(tpline, num_of_pages))
 		i += 1
 	topLines_1 = list(filter(None, topLines_1))
 	topLines_1 = list(set(topLines_1))	
 	i = 0
+
 	for bmline in bottomLines:
 		bottomLines_1.append(stripNONDigits_3(bmline, num_of_pages))
 		i += 1
 	bottomLines_1 = list(filter(None, bottomLines_1))
-	bottomLines_1= list(set(bottomLines_1))
+	bottomLines_1 = list(set(bottomLines_1))
+
+
 	if((len(topLines_1) <= 0) and (len(bottomLines_1) <= 0)):
+		print("PAGENUMBERING TOP AND BOTTOM LINES = 0 - NO PAGE NUMBER DETECTED")
 		return "NONE"
 	elif(len(topLines_1) > len(bottomLines_1)):
 		return "TOP"
@@ -194,11 +208,16 @@ def getPageNumbering(lines_array, num_of_pages):
 	for lines in lines_array:
 		lines_1.append(stripNONDigits_3(lines_array[i], num_of_pages))
 		i += 1
-	mat_lines = create2DimArray(lines_1, num_of_pages)	
+	mat_lines = create2DimArray(lines_1, num_of_pages)
+	#print("mat_lines is ", mat_lines)	
 	i = 0
 	j = 0
 	for i in range(0, len(mat_lines)):
 		for j in range(0, len(mat_lines[i])):
+			#print("mat_lines is ", mat_lines[i][j])
+			if (mat_lines[i][j] is None):
+				mat_lines[i][j] = ""
+
 			if (mat_lines[i][j].isdigit()):
 				page_dict[i + 1] = mat_lines[i][j]
 				break;
@@ -225,7 +244,7 @@ def areDigitsUnique(digits_array):
 		return True
 
 #Extract Top 3 Lines from the XML Using Elements - formatting, 
-def getTop3Line(root_element, pages_element, formattings_element):
+def getTop3Line(root_element, pages_element, formattings_element, charParams_element):
 	num1 = getNumberOfPages(root_element, pages_element, formattings_element) * 3
 	top3linesandPage = [" "] * num1 
 	numOfPagesCounted = 0
@@ -234,14 +253,31 @@ def getTop3Line(root_element, pages_element, formattings_element):
 		for a_format in a_page_element.iter(formattings_element):		
 			if (count3Lines_1 > 2):
 				break
-			elif (count3Lines_1 <= 2):				
-				top3linesandPage[numOfPagesCounted * 3 + count3Lines_1] = a_format.text
+			elif (count3Lines_1 <= 2):	
+				# BUILD STRING HERE TO GET 3 LINES
+				#top3linesandPage[numOfPagesCounted * 3 + count3Lines_1] = a_format.text
+				top3linesandPage[numOfPagesCounted * 3 + count3Lines_1] = buildString(a_format, charParams_element)
 			count3Lines_1 = count3Lines_1 + 1			
 		numOfPagesCounted += 1
 	return top3linesandPage
 
+
+def buildString(formattings_element, charParams_element):	
+	strBuilt = ""
+	bb = len(formattings_element.findall(charParams_element))	
+	if ( bb < 1):
+		#print (formattings_element.findall('charParams'))		
+		return formattings_element.text
+	else:
+		for a_charParams in formattings_element.iter(charParams_element):
+			strBuilt = strBuilt + a_charParams.text
+			#print("found Xter ", a_charParams)
+		return strBuilt
+
+
+
 #Get Bottom three lines from each Page
-def getBottom3Line(root_element, pages_element, formattings_element):
+def getBottom3Line(root_element, pages_element, formattings_element, charParams_element):
 	page_num = 0
 	num1 = getNumberOfPages(root_element, pages_element, formattings_element) * 3
 	bottom3linesandPage = [" "] * num1 
@@ -253,7 +289,8 @@ def getBottom3Line(root_element, pages_element, formattings_element):
 		hcounter = 0
 		for a_format333 in a_page33.iter(formattings_element):
 			if((bottom3Counter > countPageLines - 4)and(bottom3Counter < countPageLines + 1)):
-				bottom3linesandPage[page_num * 3 + hcounter] = a_format333.text
+				#bottom3linesandPage[page_num * 3 + hcounter] = a_format333.text
+				bottom3linesandPage[page_num * 3 + hcounter] = buildString(a_format333, charParams_element)
 				hcounter += 1
 			bottom3Counter += 1
 		page_num += 1
@@ -269,28 +306,33 @@ def getNumberOfPages(root_element, pages_element, formattings_element):
 #END OF FUNCTIONS,
 def main():
 	#Define XML File ParametersS
+	print("Checking Input and Output Files ...")
 	xml_file_name = ""
 	if(sys.argv[1].rfind(".xml") == -1):
 		xml_file_name = sys.argv[1] + ".xml"
 	else:
 		xml_file_name = sys.argv[1]
+	print("Input File is ...", xml_file_name)
+	print("*********************************")
 
 	tree = ET.parse(xml_file_name)
 	root = tree.getroot()
 	nameSpace = "{http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml}"
 	blocks = nameSpace + "block"
 	formattings = nameSpace + "formatting"
+	charParams = nameSpace + "charParams"
 	pars = nameSpace + "par"
 	lines = nameSpace + "line" 
 	pages = nameSpace + "page"
 	texts = nameSpace + "text"
 	
 	numofpages = getNumberOfPages(root, pages, formattings)
-	toplines = getTop3Line(root, pages, formattings)
-	bottomlines = getBottom3Line(root, pages, formattings)
+	toplines = getTop3Line(root, pages, formattings, charParams)
+	bottomlines = getBottom3Line(root, pages, formattings, charParams)
 
 	root.attrib['NUMBEROFPAGES'] = str(numofpages)
 	root.attrib['PAGENUMBERINGLOCATION'] = str(checkPageNumbering(toplines, bottomlines, numofpages))
+
 	insertPageNumbers(root, pages, formattings, numofpages, bottomlines,toplines)
 	getInlineStatus(root, pages, formattings, numofpages, bottomlines,toplines)
 	
@@ -299,6 +341,12 @@ def main():
 		created_file = sys.argv[2] + ".xml"
 	else:
 		created_file = sys.argv[2]
+
+	print("Output File is ...", created_file)
+	print("*********************************")
+
+	print("Processing ...")
+
 	new_xml_file = open(created_file, "wb")
 	new_xml_file.write(ET.tostring(tree))
 	new_xml_file.close()
