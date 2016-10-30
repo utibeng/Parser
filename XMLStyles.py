@@ -33,8 +33,6 @@ def insertPageNumbers(root_element, pages_element, formattings_element,num_of_pa
 	else:
 		dict_1 = {}
 	counter = 1
-	#print(pagenum_location)
-	#print (dict_1)
 	if (pagenum_location is "NONE"):
 		return
 	for a_page in root_element.iter(pages_element):
@@ -70,7 +68,6 @@ def stripNONDigits_3(string1a, pgNum):
 	for char_1 in string2a:
 		if not(char_1.isdigit()):
 			if (pg_1):
-				#return newString
 				break # Added			
 		else:
 			newString+=char_1;
@@ -78,7 +75,6 @@ def stripNONDigits_3(string1a, pgNum):
 	if((newString == "")or(int(newString) > (pgNum * 10))):
 		return ""
 	elif(int(newString) > 0):
-		# and (int(newString) <= pgNum)):
 		return newString
 
 #Create a matrix of number of pages X 3 for ease of header comparison and checks
@@ -167,11 +163,6 @@ def getFooter (footer4, pages):
 
 #Determines if Page Numbering is at Top, Bottom or None
 def checkPageNumbering(topLines, bottomLines, num_of_pages):
-	#print("TOPLINES ARE ", topLines)
-	#print("BOTTOMLINES ARE ", bottomLines)
-	#print("NUMBER OF PAGES ARE ", num_of_pages)
-
-
 	topLines_1 = list()
 	bottomLines_1 = list()
 	i = 0
@@ -209,12 +200,10 @@ def getPageNumbering(lines_array, num_of_pages):
 		lines_1.append(stripNONDigits_3(lines_array[i], num_of_pages))
 		i += 1
 	mat_lines = create2DimArray(lines_1, num_of_pages)
-	#print("mat_lines is ", mat_lines)	
 	i = 0
 	j = 0
 	for i in range(0, len(mat_lines)):
 		for j in range(0, len(mat_lines[i])):
-			#print("mat_lines is ", mat_lines[i][j])
 			if (mat_lines[i][j] is None):
 				mat_lines[i][j] = ""
 
@@ -253,9 +242,7 @@ def getTop3Line(root_element, pages_element, formattings_element, charParams_ele
 		for a_format in a_page_element.iter(formattings_element):		
 			if (count3Lines_1 > 2):
 				break
-			elif (count3Lines_1 <= 2):	
-				# BUILD STRING HERE TO GET 3 LINES
-				#top3linesandPage[numOfPagesCounted * 3 + count3Lines_1] = a_format.text
+			elif (count3Lines_1 <= 2):
 				top3linesandPage[numOfPagesCounted * 3 + count3Lines_1] = buildString(a_format, charParams_element)
 			count3Lines_1 = count3Lines_1 + 1			
 		numOfPagesCounted += 1
@@ -265,16 +252,12 @@ def getTop3Line(root_element, pages_element, formattings_element, charParams_ele
 def buildString(formattings_element, charParams_element):	
 	strBuilt = ""
 	bb = len(formattings_element.findall(charParams_element))	
-	if ( bb < 1):
-		#print (formattings_element.findall('charParams'))		
+	if ( bb < 1):		
 		return formattings_element.text
 	else:
 		for a_charParams in formattings_element.iter(charParams_element):
 			strBuilt = strBuilt + a_charParams.text
-			#print("found Xter ", a_charParams)
 		return strBuilt
-
-
 
 #Get Bottom three lines from each Page
 def getBottom3Line(root_element, pages_element, formattings_element, charParams_element):
@@ -289,7 +272,6 @@ def getBottom3Line(root_element, pages_element, formattings_element, charParams_
 		hcounter = 0
 		for a_format333 in a_page33.iter(formattings_element):
 			if((bottom3Counter > countPageLines - 4)and(bottom3Counter < countPageLines + 1)):
-				#bottom3linesandPage[page_num * 3 + hcounter] = a_format333.text
 				bottom3linesandPage[page_num * 3 + hcounter] = buildString(a_format333, charParams_element)
 				hcounter += 1
 			bottom3Counter += 1

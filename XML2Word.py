@@ -65,11 +65,6 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 	pagenum_location = root_element.get("PAGENUMBERINGLOCATION", 0)
 	x = 0
 
-	#paragraph = document1.add_paragraph()
-	#paragraph.style = document1.styles['BfA Normal']
-	#run = paragraph.add_run( "THIS IS BFA NORMAL")
-
-
 	for a_par in root_element.iter(pars_element):
 		print("Writing Paragraph Number ", x)
 		x += 1
@@ -99,7 +94,6 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 			inline_1 = a_format.get("INLINE", "False")
 
 			
-			#stringToWrite = a_format.text
 			stringToWrite = buildString(a_format,charParams_element)
 
 
@@ -127,8 +121,8 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 
 
 
-				#init_page = current_page
-			init_page = current_page # JUST ADDED
+				
+			init_page = current_page 
 
 			first_run = 0
 			writeText(p, stringToWrite, isItalic1, isBold1,0, font_size1, inline_1, font_name00)
@@ -154,12 +148,10 @@ def stripNONDigits_3(string1a, pgNum):
 	string2a = str(string1a)
 	newString = ""
 	pg_1 = 0
-	#num_of_pages_generic = getNumberOfPages(root, pages, formattings)
 
 	for char_1 in string2a:
 		if not(char_1.isdigit()):
-			if (pg_1):
-				#return newString
+			if (pg_1):				
 				break # Added			
 		else:
 			newString+=char_1;
@@ -167,7 +159,6 @@ def stripNONDigits_3(string1a, pgNum):
 	if((newString == "")or(int(newString) > (pgNum * 10))):
 		return ""
 	elif(int(newString) > 0):
-		# and (int(newString) <= pgNum)):
 		return newString
 	
 
