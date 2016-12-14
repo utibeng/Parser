@@ -1,0 +1,56 @@
+[33mcommit 3a57759ec426474b8f4f1636292391fb40895903[m
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Sun Oct 30 16:09:40 2016 +0000
+
+    Unwanted Comments Removed and Typo Corrected
+
+[33mcommit 3af9f6edccbd88ad66f68ed5f3b651e9953f3022[m
+Merge: cf14742 cf82db6
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Sun Oct 30 10:37:35 2016 +0000
+
+    Merge branch 'master' of https://github.com/utibeng/Parser
+
+[33mcommit cf82db68437b6d58000027b9f5b95a7b0a278409[m
+Author: utibeng <utibe_ng@yahoo.com>
+Date:   Sun Oct 30 10:09:47 2016 +0000
+
+    Initial commit
+
+[33mcommit cf1474265862b010c79b2b77b4e861fb4c4c65dc[m
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Fri Oct 28 05:40:12 2016 +0100
+
+     On branch master
+     Changes to be committed:
+    	deleted:    Requirment Specs_Table.odt
+
+[33mcommit 04e6886382ae766ba0c96d928295e1aff0be73d6[m
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Fri Oct 28 05:36:17 2016 +0100
+
+    Style Detection and Use Added
+     Changes to be committed:
+    	modified:   Enhanced_XML_Specs_Application.odt
+    	new file:   result11_Edited.xml
+    
+     Changes not staged for commit:
+    	deleted:    Requirment Specs_Table.odt
+
+[33mcommit dc0f2d295425c200f3aaa64868482b3f36941650[m
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Fri Oct 28 05:31:16 2016 +0100
+
+    Added New Files
+
+[33mcommit 839fb1e947619e0c126558c8fc99bb7e21b1d706[m
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Fri Oct 28 05:25:28 2016 +0100
+
+    Version 01, and Enhanced XML Styles Specification added
+
+[33mcommit f892ade841ff045adf725bf1730c2666817e204b[m
+Author: utibe effiong <emilitusy2k@yahoo.com>
+Date:   Fri Oct 28 05:18:51 2016 +0100
+
+    Initial Version of the XMLStyle and XML2Word Python Scripts as well as the Requirement Specs

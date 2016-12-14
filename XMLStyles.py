@@ -9,6 +9,8 @@ import re
 from collections import Counter
 from docx.enum.text import WD_BREAK
 import sys
+import logging
+import time
 
 #Gets the Current Page Number
 def getCurrentPageNum(a_format, pages_element):
@@ -18,6 +20,7 @@ def getCurrentPageNum(a_format, pages_element):
 	for previous_pages in pg2.itersiblings(preceding=True):
 		page_num += 1
 	print("Current Page Num is ", page_num)
+	logging.debug("Current Page Num is " + page_num)
 	return page_num
 
 #Insert the page number for each page tag on the new xml file
@@ -124,9 +127,11 @@ def getHeader (header3, pages):
 	header33 = header3
 	if(len(header3) != (3*pages)):
 		print("Header Extraction Incorrect ")
+		logging.debug("Header Extraction Incorrect ")
 		return
 	if(pages < 2):	
 		print("Only Single Page ")
+		logging.debug("Only Single Page ")
 		return
 	#Strip digits at start and end of top 3 lines	
 	else:
@@ -134,10 +139,12 @@ def getHeader (header3, pages):
 		for eachLine in header33:						
 			header33[headerIndex] = stripDigits(eachLine)
 			print("IE", header33[headerIndex])
+			logging.debug("IE", header33[headerIndex])
 			headerIndex += 1
 		pageMatrix = create2DimArray(header33, pages)
 		dictOfHeaders = compare3TopBottomLines(pageMatrix, pages)
 		print("DICT OF HEADERS IS ****    ", dictOfHeaders)
+		logging.debug("DICT OF HEADERS IS ****    ", dictOfHeaders)
 	return dictOfHeaders
 
 #Check for the Presence of Footers
@@ -145,9 +152,11 @@ def getHeader (header3, pages):
 def getFooter (footer4, pages):	
 	if(len(footer4) != (3*pages)):
 		print("Footer Extraction Incorrect ")
+		logging.debug("Footer Extraction Incorrect ")
 		return
 	if(pages < 2):	
 		print("Only Single Page ")
+		logging.debug("Only Single Page ")
 		return
 	#Strip digits at start and end of top 3 lines	
 	else:
@@ -155,10 +164,12 @@ def getFooter (footer4, pages):
 		for eachLine in footer4:
 			footer4[footerIndex] = stripDigits(eachLine)
 			print ("THAT WAS NEW FOOTER FUNCTION ", footer4[footerIndex])
+			logging.debug("THAT WAS NEW FOOTER FUNCTION " + footer4[footerIndex])
 			footerIndex += 1
 		pageMatrix = create2DimArray(footer4, pages)
 		dictOfFooters = compare3TopBottomLines(pageMatrix, pages)
 		print("DICT OF FOOTERS IS ****    ", dictOfFooters)
+		logging.debug("DICT OF FOOTERS IS ****    " + dictOfFooters)
 	return dictOfFooters
 
 #Determines if Page Numbering is at Top, Bottom or None
@@ -183,6 +194,7 @@ def checkPageNumbering(topLines, bottomLines, num_of_pages):
 
 	if((len(topLines_1) <= 0) and (len(bottomLines_1) <= 0)):
 		print("PAGENUMBERING TOP AND BOTTOM LINES = 0 - NO PAGE NUMBER DETECTED")
+		logging.debug("PAGENUMBERING TOP AND BOTTOM LINES = 0 - NO PAGE NUMBER DETECTED")
 		return "NONE"
 	elif(len(topLines_1) > len(bottomLines_1)):
 		return "TOP"
@@ -287,6 +299,20 @@ def getNumberOfPages(root_element, pages_element, formattings_element):
 
 #END OF FUNCTIONS,
 def main():
+	
+
+
+
+
+
+
+
+	LOG_FILENAME = 'XMLStyles.log'
+	logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG, filemode = 'w', format='%(message)s')
+	logging.debug('*********************************')
+
+
+
 	#Define XML File ParametersS
 	print("Checking Input and Output Files ...")
 	xml_file_name = ""
@@ -295,6 +321,7 @@ def main():
 	else:
 		xml_file_name = sys.argv[1]
 	print("Input File is ...", xml_file_name)
+	logging.debug("Input File is ..." + xml_file_name)
 	print("*********************************")
 
 	tree = ET.parse(xml_file_name)
@@ -326,11 +353,19 @@ def main():
 
 	print("Output File is ...", created_file)
 	print("*********************************")
+	logging.debug("Output File is ..." + created_file)
 
 	print("Processing ...")
 
 	new_xml_file = open(created_file, "wb")
 	new_xml_file.write(ET.tostring(tree))
 	new_xml_file.close()
-	
+	logging.debug("END OF RUN")
+	logging.debug("********************************")
+	logging.debug("EXECUTION DURATION IS  " + str((time.time() - start_time)))
+
+start_time = time.time()	
 main()
+
+
+

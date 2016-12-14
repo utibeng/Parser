@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import time
+start_time = time.time()
 from lxml import etree as ET
 from docx import Document
 from docx.shared import Pt
@@ -10,7 +12,8 @@ from collections import Counter
 from docx.enum.text import WD_BREAK
 import sys
 from docx.enum.style import WD_STYLE_TYPE
-
+import logging
+import time
 
 
 #APPROVED::::Function to write a line to docx, specifying font characteristics
@@ -29,9 +32,9 @@ def writeText(p1, textToWrite1, italicText, boldText, underlineText, font_size0,
 		fontUsed.bold = True
 	if(underlineText):		
 		fontUsed.underline = True
-	fontUsed.name = font_name0
-	if ((int(float(font_size0)) > 0) and (int(float(font_size0)) < 1000)):
-		fontUsed.size = Pt(int(float(font_size0)))
+	#fontUsed.name = font_name0 # -----REMOVED SO STYLE IS USED TO CHOOSE FONT VERSION 4
+	#if ((int(float(font_size0)) > 0) and (int(float(font_size0)) < 1000)):
+	#	fontUsed.size = Pt(int(float(font_size0)))
 	return
 
 
@@ -67,6 +70,7 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 
 	for a_par in root_element.iter(pars_element):
 		print("Writing Paragraph Number ", x)
+		logging.debug("Writing Paragraph Number " + str(x))
 		x += 1
 		line_spa1 = a_par.get("lineSpacing", 111)
 		alignment1 = a_par.get("align", "NONE")
@@ -74,7 +78,8 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 
 		#Set Paragraph Style	
 		par_style = a_par.get("STYLE")
-		print("STYLE DETECTED IS ... ", par_style)		
+		print("STYLE DETECTED IS ... ", par_style)
+		logging.debug("STYLE DETECTED IS ... " + par_style)		
 		p.style = par_style
 
 		if((line_spa != line_spa1)or(alignment != alignment1)):
@@ -113,11 +118,11 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 
 			if((current_page != init_page)and (first_run != 1)):	
 				writeText(p,"*** NEW PAGE HERE ***", isItalic1, isBold1,0, font_size1, inline_1, font_name00)
-
-				if((pagenum_location == "TOP") or (pagenum_location == "BOTTOM")):
-					writeText(p,"*** CURRENT PAGE NUMBERING  DETECTED IS *** " + pg2.get("PAGENUMBERSCANNED", 0) + "\n", 0, 0,0, 10, inline_1, font_name00)
-			if(((pagenum_location == "TOP") or (pagenum_location == "BOTTOM")) and (first_run == 1)):
-					writeText(p,"*** CURRENT PAGE NUMBERING  DETECTED IS *** " + pg2.get("PAGENUMBERSCANNED", 0) + "\n", 0, 0,0, 10, inline_1, font_name00)			
+			
+			#	if((pagenum_location == "TOP") or (pagenum_location == "BOTTOM")):
+			#		writeText(p,"*** CURRENT PAGE NUMBERING  DETECTED IS *** " + pg2.get("PAGENUMBERSCANNED", 0) + "\n", 0, 0,0, 10, inline_1, font_name00)
+			#if(((pagenum_location == "TOP") or (pagenum_location == "BOTTOM")) and (first_run == 1)):
+			#		writeText(p,"*** CURRENT PAGE NUMBERING  DETECTED IS *** " + pg2.get("PAGENUMBERSCANNED", 0) + "\n", 0, 0,0, 10, inline_1, font_name00)			
 
 
 
@@ -209,9 +214,11 @@ def getHeader (header3, pages):
 	header33 = header3
 	if(len(header3) != (3*pages)):
 		print("Header Extraction Incorrect ")
+		logging.debug("Header Extraction Incorrect")
 		return
 	if(pages < 2):	
 		print("Only Single Page ")
+		logging.debug("Only Single Page")
 		return
 	#Strip digits at start and end of top 3 lines	
 	else:
@@ -219,10 +226,12 @@ def getHeader (header3, pages):
 		for eachLine in header33:						
 			header33[headerIndex] = stripDigits(eachLine)
 			print("IE", header33[headerIndex])
+			logging.debug("IE " + header33[headerIndex])
 			headerIndex += 1
 		pageMatrix = create2DimArray(header33, pages)
 		dictOfHeaders = compare3TopBottomLines(pageMatrix, pages)
 		print("DICT OF HEADERS IS ****    ", dictOfHeaders)
+		logging.debug("DICT OF HEADERS IS ****    " + dictOfHeaders)
 	return dictOfHeaders
 
 #Check for the Presence of Footers
@@ -230,9 +239,11 @@ def getHeader (header3, pages):
 def getFooter (footer4, pages):	
 	if(len(footer4) != (3*pages)):
 		print("Footer Extraction Incorrect ")
+		logging.debug("Footer Extraction Incorrect ")
 		return
 	if(pages < 2):	
 		print("Only Single Page ")
+		logging.debug("Only Single Page ")
 		return
 	#Strip digits at start and end of top 3 lines	
 	else:
@@ -240,10 +251,12 @@ def getFooter (footer4, pages):
 		for eachLine in footer4:
 			footer4[footerIndex] = stripDigits(eachLine)
 			print ("THAT WAS NEW FOOTER FUNCTION ", footer4[footerIndex])
+			logging.debug("THAT WAS NEW FOOTER FUNCTION " + footer4[footerIndex])
 			footerIndex += 1
 		pageMatrix = create2DimArray(footer4, pages)
 		dictOfFooters = compare3TopBottomLines(pageMatrix, pages)
 		print("DICT OF FOOTERS IS ****    ", dictOfFooters)
+		logging.debug("DICT OF FOOTERS IS ****    " + dictOfFooters)
 	return dictOfFooters
 
 def filterNumericStrings_3(string1a):
@@ -303,7 +316,7 @@ def addHeadingStyles(doc_1):
 	styles.add_style('Heading 4', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
 	styles.add_style('Heading 5', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
 	styles.add_style('Heading 6', WD_STYLE_TYPE.PARAGRAPH, builtin=True)
-
+	logging.debug("Added all Additional Styles to Document ")
 
 
 
@@ -311,6 +324,11 @@ def addHeadingStyles(doc_1):
 #END OF FUNCTIONS,
 def main():
 	#Define XML File Parameters
+
+	LOG_FILENAME = 'XML2Word.log'
+	logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG, filemode = 'w', format='%(message)s')
+	logging.debug('*********************************')
+
 	
 	print("Checking I/O Files ...")
 	xml_file_name = ""
@@ -320,6 +338,7 @@ def main():
 		xml_file_name = sys.argv[1]
 	print("Input File is ...", xml_file_name)
 	print("*********************************")
+	logging.debug("INPUT FILENAME IS " + xml_file_name)
 
 	tree = ET.parse(xml_file_name)
 	print("PARSED XML FILE ...", tree)
@@ -343,6 +362,7 @@ def main():
 	else:
 		created_file = sys.argv[2]
 	print("Output File is ...", created_file)
+	logging.debug("OUTPUT FILENAME IS " + created_file)
 	print("*********************************")
 	print("Processing ...")
 
@@ -351,9 +371,15 @@ def main():
 	document1.save(created_file)	
 	#Write XMl Contents to docx
 	print("Started Writing to Word Document")
+	logging.debug("Started Writing to Word Document " + created_file)
 	writeParagraphtoDocument(root, pages, pars, formattings, created_file, charParams)
-main()
+	logging.debug("END OF RUN")
+	logging.debug("********************************")
+	logging.debug("EXECUTION DURATION IS  " + str((time.time() - start_time + 0.08)))
 
+
+main()
+#print("EXECUTION DURATION IS  " + str((time.time() - start_time + 0.1)))
 
 
 
