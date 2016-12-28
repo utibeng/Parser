@@ -79,7 +79,7 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 		#Set Paragraph Style	
 		par_style = a_par.get("STYLE")
 		print("STYLE DETECTED IS ... ", par_style)
-		logging.debug("STYLE DETECTED IS ... " + par_style)		
+		logging.debug("STYLE DETECTED IS ... " + str(par_style))		
 		p.style = par_style
 
 		if((line_spa != line_spa1)or(alignment != alignment1)):
@@ -226,12 +226,12 @@ def getHeader (header3, pages):
 		for eachLine in header33:						
 			header33[headerIndex] = stripDigits(eachLine)
 			print("IE", header33[headerIndex])
-			logging.debug("IE " + header33[headerIndex])
+			logging.debug("IE " + str(header33[headerIndex]))
 			headerIndex += 1
 		pageMatrix = create2DimArray(header33, pages)
 		dictOfHeaders = compare3TopBottomLines(pageMatrix, pages)
 		print("DICT OF HEADERS IS ****    ", dictOfHeaders)
-		logging.debug("DICT OF HEADERS IS ****    " + dictOfHeaders)
+		logging.debug("DICT OF HEADERS IS ****    " + str(dictOfHeaders))
 	return dictOfHeaders
 
 #Check for the Presence of Footers
@@ -251,12 +251,12 @@ def getFooter (footer4, pages):
 		for eachLine in footer4:
 			footer4[footerIndex] = stripDigits(eachLine)
 			print ("THAT WAS NEW FOOTER FUNCTION ", footer4[footerIndex])
-			logging.debug("THAT WAS NEW FOOTER FUNCTION " + footer4[footerIndex])
+			logging.debug("THAT WAS NEW FOOTER FUNCTION " + str(footer4[footerIndex]))
 			footerIndex += 1
 		pageMatrix = create2DimArray(footer4, pages)
 		dictOfFooters = compare3TopBottomLines(pageMatrix, pages)
 		print("DICT OF FOOTERS IS ****    ", dictOfFooters)
-		logging.debug("DICT OF FOOTERS IS ****    " + dictOfFooters)
+		logging.debug("DICT OF FOOTERS IS ****    " + str(dictOfFooters))
 	return dictOfFooters
 
 def filterNumericStrings_3(string1a):
@@ -338,7 +338,7 @@ def main():
 		xml_file_name = sys.argv[1]
 	print("Input File is ...", xml_file_name)
 	print("*********************************")
-	logging.debug("INPUT FILENAME IS " + xml_file_name)
+	logging.debug("INPUT FILENAME IS " + str(xml_file_name))
 
 	tree = ET.parse(xml_file_name)
 	print("PARSED XML FILE ...", tree)
@@ -362,7 +362,7 @@ def main():
 	else:
 		created_file = sys.argv[2]
 	print("Output File is ...", created_file)
-	logging.debug("OUTPUT FILENAME IS " + created_file)
+	logging.debug("OUTPUT FILENAME IS " + str(created_file))
 	print("*********************************")
 	print("Processing ...")
 
@@ -371,7 +371,7 @@ def main():
 	document1.save(created_file)	
 	#Write XMl Contents to docx
 	print("Started Writing to Word Document")
-	logging.debug("Started Writing to Word Document " + created_file)
+	logging.debug("Started Writing to Word Document " + str(created_file))
 	writeParagraphtoDocument(root, pages, pars, formattings, created_file, charParams)
 	logging.debug("END OF RUN")
 	logging.debug("********************************")

@@ -1,26 +1,26 @@
 *********************************
-INPUT FILENAME IS result11_Edited.xml
-OUTPUT FILENAME IS kk.docx
+INPUT FILENAME IS it3.xml
+OUTPUT FILENAME IS bb3.docx
 Added all Additional Styles to Document 
-Started Writing to Word Document kk.docx
+Started Writing to Word Document bb3.docx
 Writing Paragraph Number 0
-STYLE DETECTED IS ... BfA Normal
+STYLE DETECTED IS ... Actor
 Writing Paragraph Number 1
-STYLE DETECTED IS ... BfA Normal
+STYLE DETECTED IS ... Actor
 Writing Paragraph Number 2
-STYLE DETECTED IS ... BfA Normal
-Writing Paragraph Number 3
 STYLE DETECTED IS ... Heading 1
+Writing Paragraph Number 3
+STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 4
-STYLE DETECTED IS ... SectionBreak
+STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 5
 STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 6
-STYLE DETECTED IS ... Actor
+STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 7
 STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 8
-STYLE DETECTED IS ... StageDirection
+STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 9
 STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 10
@@ -32,7 +32,7 @@ STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 13
 STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 14
-STYLE DETECTED IS ... BfA Normal
+STYLE DETECTED IS ... None
 Writing Paragraph Number 15
 STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 16
@@ -54,37 +54,7 @@ STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 24
 STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 25
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 26
-STYLE DETECTED IS ... Note-title
-Writing Paragraph Number 27
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 28
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 29
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 30
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 31
-STYLE DETECTED IS ... Heading 2
-Writing Paragraph Number 32
-STYLE DETECTED IS ... Copyright
-Writing Paragraph Number 33
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 34
-STYLE DETECTED IS ... Note-content
-Writing Paragraph Number 35
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 36
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 37
-STYLE DETECTED IS ... Contents
-Writing Paragraph Number 38
-STYLE DETECTED IS ... Label
-Writing Paragraph Number 39
-STYLE DETECTED IS ... BfA Alt 1
-Writing Paragraph Number 40
-STYLE DETECTED IS ... PageNum
+STYLE DETECTED IS ... BfA Normal
 END OF RUN
 ********************************
-EXECUTION DURATION IS  0.4542341995239258
+EXECUTION DURATION IS  0.4758258628845215
