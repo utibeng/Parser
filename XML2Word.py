@@ -76,11 +76,21 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 		alignment1 = a_par.get("align", "NONE")
 		p = setParagraph(docx_document, line_spa1, alignment1)
 
-		#Set Paragraph Style	
+		#Set Paragraph Style
 		par_style = a_par.get("STYLE")
-		print("STYLE DETECTED IS ... ", par_style)
-		logging.debug("STYLE DETECTED IS ... " + str(par_style))		
-		p.style = par_style
+		if (str(par_style) == "None"):
+			par_style = "BfA Normal"
+			logging.debug("NO STYLE DETECTED ... BFA Normal Used ")
+			print("NO STYLE DETECTED ... BFA Normal Used ")
+
+		try:
+			p.style = par_style
+		except:
+			par_style = "BfA Normal"
+			logging.debug("INVALID STYLE DETECTED ... BFA Normal Used ")
+			print("INVALID STYLE DETECTED ... BFA Normal Used ")
+			pass
+
 
 		if((line_spa != line_spa1)or(alignment != alignment1)):
 			stringToWrite = "Current Line Spacing XXX is " + str(line_spa1) + " Current Alignment YYY is " + str(alignment1)
@@ -123,10 +133,7 @@ def writeParagraphtoDocument(root_element, page_element, pars_element, formattin
 			#		writeText(p,"*** CURRENT PAGE NUMBERING  DETECTED IS *** " + pg2.get("PAGENUMBERSCANNED", 0) + "\n", 0, 0,0, 10, inline_1, font_name00)
 			#if(((pagenum_location == "TOP") or (pagenum_location == "BOTTOM")) and (first_run == 1)):
 			#		writeText(p,"*** CURRENT PAGE NUMBERING  DETECTED IS *** " + pg2.get("PAGENUMBERSCANNED", 0) + "\n", 0, 0,0, 10, inline_1, font_name00)			
-
-
-
-				
+	
 			init_page = current_page 
 
 			first_run = 0
@@ -367,7 +374,7 @@ def main():
 	print("Processing ...")
 
 	document1 = Document("Template.docx")
-	addHeadingStyles(document1)
+	#addHeadingStyles(document1)
 	document1.save(created_file)	
 	#Write XMl Contents to docx
 	print("Started Writing to Word Document")
@@ -379,7 +386,7 @@ def main():
 
 
 main()
-#print("EXECUTION DURATION IS  " + str((time.time() - start_time + 0.1)))
+
 
 
 

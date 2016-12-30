@@ -1,60 +1,52 @@
 *********************************
-INPUT FILENAME IS it3.xml
-OUTPUT FILENAME IS bb3.docx
-Added all Additional Styles to Document 
-Started Writing to Word Document bb3.docx
+INPUT FILENAME IS kk.xml
+OUTPUT FILENAME IS it2.docx
+Started Writing to Word Document it2.docx
 Writing Paragraph Number 0
-STYLE DETECTED IS ... Actor
+NO STYLE DETECTED ... BFA Normal Used 
 Writing Paragraph Number 1
-STYLE DETECTED IS ... Actor
+INVALID STYLE DETECTED ... BFA Normal Used 
 Writing Paragraph Number 2
-STYLE DETECTED IS ... Heading 1
+NO STYLE DETECTED ... BFA Normal Used 
 Writing Paragraph Number 3
-STYLE DETECTED IS ... BfA Normal
+NO STYLE DETECTED ... BFA Normal Used 
 Writing Paragraph Number 4
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 5
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 6
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 7
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 8
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 9
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 10
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 11
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 12
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 13
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 14
-STYLE DETECTED IS ... None
 Writing Paragraph Number 15
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 16
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 17
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 18
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 19
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 20
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 21
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 22
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 23
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 24
-STYLE DETECTED IS ... BfA Normal
 Writing Paragraph Number 25
-STYLE DETECTED IS ... BfA Normal
+Writing Paragraph Number 26
+Writing Paragraph Number 27
+Writing Paragraph Number 28
+Writing Paragraph Number 29
+Writing Paragraph Number 30
+Writing Paragraph Number 31
+Writing Paragraph Number 32
+Writing Paragraph Number 33
+Writing Paragraph Number 34
+Writing Paragraph Number 35
+Writing Paragraph Number 36
+Writing Paragraph Number 37
+Writing Paragraph Number 38
+Writing Paragraph Number 39
+Writing Paragraph Number 40
 END OF RUN
 ********************************
-EXECUTION DURATION IS  0.4758258628845215
+EXECUTION DURATION IS  0.44539483070373537
